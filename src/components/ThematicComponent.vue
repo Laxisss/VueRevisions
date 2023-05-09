@@ -1,8 +1,8 @@
 <template>
-  <main @click="openCat">
+  <main @click="openTheme">
     <section>
-      <h3>{{ cat.name }}</h3>
-      <p>Theme1, theme2....</p>
+      <h3>{{ theme.name }}</h3>
+      <p>carte1, carte2....</p>
     </section>
     <footer>
       &rsaquo;
@@ -11,14 +11,15 @@
 </template>
 
 <script>
+
 export default {
-  name: 'CategoryComponent',
+  name: 'ThematicComponent',
   props: {
-    cat: Object
+    theme: Object
   },
   methods: {
-    openCat () {
-      this.$router.push('/about/' + this.cat.name)
+    openTheme () {
+      this.$router.push('/about/' + this.$route.params.name + '/' + this.theme.name)
       // this.$emit('seeCat', this.cat.name)
     }
   }

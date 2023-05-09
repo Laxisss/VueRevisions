@@ -7,17 +7,26 @@
           <span>
             <button class="v-h plus-button">+</button>
           </span>
-          <h2>Catégories</h2>
+          <h2>
+            <span v-if="currentCat == null">Catégories</span>
+            <span v-else-if="currentTheme == null">Themes</span>
+            <span v-else>Cartes</span>
+          </h2>
           <span>
             <button class="plus-button" v-if="!addNew" @click="addNew = !addNew">+</button>
             <span class="input-group" v-else>
-              <input type="text" v-model="newCategory"/>
-              <button @click="addCategory">&check;</button>
+              <input type="text" v-model="newItem"/>
+              <button v-if="currentCat == null" @click="addCategory">&check;</button>
+              <button v-else-if="currentTheme == null" @click="addTheme">&check;</button>
+              <button v-else @click="addCard">&check;</button>
             </span>
           </span>
         </div>
         <!-- <span >cat</span> -->
-        <Category v-for="(item, index) in dataStore.data.categories" :key="index" :cat="item"/>
+        <CategoryList v-if="currentCat == null" @seeCat="seeCat"/>
+        <CategoryView v-else-if="currentTheme == null" :catName="currentCat"/>
+        <ThematicView v-else :catName="currentCat"/>
+        <!-- <Category @seeCat="seeCat" v-for="(item, index) in dataStore.data.categories" :key="index" :cat="item"/> -->
         <!-- <div> {{ dataStore.data }}</div> -->
       </div>
     </div>
@@ -26,34 +35,71 @@
 
 <script>
 import { store } from '../store'
-import Category from '../components/CategoryComponent.vue'
+import CategoryList from '../components/CategoryList.vue'
+import CategoryView from '@/components/CategoryView.vue'
+import ThematicView from '@/components/ThematicView.vue'
 
 export default {
   name: 'PanelView',
   components: {
-    Category
+    CategoryList,
+    CategoryView,
+    ThematicView
   },
   data () {
     return {
       addNew: false,
       dataStore: store,
-      newCategory: '',
+      newItem: '',
       // data: this.dataStore.data,
-      error: ''
+      error: '',
+      currentCat: null,
+      currentTheme: null
     }
   },
   methods: {
     addCategory () {
-      if (this.newCategory === '') {
+      if (this.newItem === '') {
         this.error = 'Nom Invalide'
         return
       }
       this.addNew = false
       this.dataStore.data.categories.push({
-        name: this.newCategory,
+        name: this.newItem,
         thematics: []
       })
+    },
+    addTheme () {
+      if (this.newItem === '') {
+        this.error = 'Nom Invalide'
+        return
+      }
+      this.addNew = false
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.push({
+        name: this.newItem,
+        thematics: []
+      })
+    },
+    seeCat (payload) {
+      this.currentCat = payload
+      console.log(payload)
     }
+  },
+  updated () {
+    this.currentCat = this.$route.params.name
+  },
+  mounted () {
+    this.currentCat = this.$route.params.name
+  },
+  created () {
+    // window.addEventListener('beforeunload', e => {
+    //   console.log('there')
+    //   // const returnValue = confirm('Sur ?')
+    //   // eslint-disable-next-line
+    //   // e.returnValue = '\o/'
+    //   e.preventDefault()
+    //   this.$router.push('/about')
+    // })
   }
 }
 </script>

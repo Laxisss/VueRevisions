@@ -3,11 +3,11 @@ export const store = {
     categories: [
       {
         id: 0,
-        name: '',
+        name: 'first',
         thematics: [
           {
             id: 0,
-            name: '',
+            name: 'themeCool',
             level: 0,
             cards: [
               {
