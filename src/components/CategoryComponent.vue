@@ -1,25 +1,37 @@
 <template>
-  <main @click="openCat">
-    <section>
+  <main>
+    <header @click="delCat">
+      &times;
+    </header>
+    <section @click="openCat">
       <h3>{{ cat.name }}</h3>
-      <p>Theme1, theme2....</p>
+      <p v-for="(item, index) in cat.thematics" :key="index">{{ item.name }}</p>
     </section>
-    <footer>
+    <footer @click="openCat">
       &rsaquo;
     </footer>
   </main>
 </template>
 
 <script>
+import { store } from '@/store'
+
 export default {
   name: 'CategoryComponent',
   props: {
     cat: Object
   },
+  data () {
+    return {
+      dataStore: store
+    }
+  },
   methods: {
     openCat () {
-      this.$router.push('/about/' + this.cat.name)
-      // this.$emit('seeCat', this.cat.name)
+      this.$router.push('/revisions/' + this.cat.name)
+    },
+    delCat () {
+      this.dataStore.data.categories.splice(this.dataStore.data.categories.indexOf(this.cat), 1)
     }
   }
 }
@@ -42,7 +54,7 @@ main:hover {
 section {
   flex: 95%;
 }
-footer {
+footer, header {
   flex: 5%;
   font-size: xx-large;
 }

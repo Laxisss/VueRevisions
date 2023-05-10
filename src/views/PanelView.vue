@@ -5,7 +5,7 @@
       <div class="card">
         <div class="card-header">
           <span>
-            <button class="v-h plus-button">+</button>
+            <button :class="currentCat == null ? 'v-h' : ''" @click="$router.back" class="plus-button">&larr;</button>
           </span>
           <h2>
             <span v-if="currentCat == null">Catégories</span>
@@ -14,7 +14,7 @@
           </h2>
           <span>
             <button class="plus-button" v-if="!addNew && (currentCat == null || currentTheme == null)" @click="addNew = !addNew">+</button>
-            <button class="plus-button" v-else-if="!addnew" @click="addCard">+</button>
+            <button class="plus-button" v-else-if="!addNew" @click="addCard">+</button>
             <span class="input-group" v-else>
               <input type="text" v-model="newItem"/>
               <button v-if="currentCat == null" @click="addCategory">&check;</button>
@@ -22,12 +22,9 @@
             </span>
           </span>
         </div>
-        <!-- <span >cat</span> -->
-        <CategoryList v-if="currentCat == null"/>
-        <CategoryView v-else-if="currentTheme == null" :catName="currentCat"/>
-        <ThematicView v-else :catName="currentCat"/>
-        <!-- <Category @seeCat="seeCat" v-for="(item, index) in dataStore.data.categories" :key="index" :cat="item"/> -->
-        <!-- <div> {{ dataStore.data }}</div> -->
+        <CategoryList :updater="updater" :categories="categories" v-if="currentCat == null"/>
+        <CategoryView :updater="updater" v-else-if="currentTheme == null" :catName="currentCat"/>
+        <ThematicView :updater="updater" v-else :catName="currentCat"/>
       </div>
     </div>
   </div>
@@ -54,7 +51,9 @@ export default {
       // data: this.dataStore.data,
       error: '',
       currentCat: null,
-      currentTheme: null
+      currentTheme: null,
+      categories: [],
+      updater: 0
     }
   },
   watch: {
@@ -73,6 +72,7 @@ export default {
         name: this.newItem,
         thematics: []
       })
+      this.updater = Math.random()
     },
     addTheme () {
       if (this.newItem === '') {
@@ -82,7 +82,7 @@ export default {
       this.addNew = false
       this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.push({
         name: this.newItem,
-        thematics: []
+        cards: []
       })
     },
     addCard () {
@@ -98,20 +98,15 @@ export default {
   updated () {
     this.currentCat = this.$route.params.name
     this.currentTheme = this.$route.params.tname
+    this.categories = this.dataStore.data.categories
   },
   mounted () {
     this.currentCat = this.$route.params.name
     this.currentTheme = this.$route.params.tname
-  },
-  created () {
-    // window.addEventListener('beforeunload', e => {
-    //   console.log('there')
-    //   // const returnValue = confirm('Sur ?')
-    //   // eslint-disable-next-line
-    //   // e.returnValue = '\o/'
-    //   e.preventDefault()
-    //   this.$router.push('/about')
-    // })
+    this.categories = this.dataStore.data.categories
+    setTimeout(() => {
+      this.updater = Math.random()
+    }, 100)
   }
 }
 </script>

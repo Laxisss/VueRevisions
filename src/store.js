@@ -1,26 +1,7 @@
-export const store = {
+// eslint-disable-next-line
+export let store = {
   data: {
-    categories: [
-      {
-        id: 0,
-        name: 'first',
-        thematics: [
-          {
-            id: 0,
-            name: 'themeCool',
-            level: 0,
-            cards: [
-              {
-                id: 0,
-                recto: '',
-                verso: '',
-                rate: []
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    categories: []
   }
 }
 // // eslint-disable-next-line

@@ -7,7 +7,7 @@ import { store } from './store'
 createApp(App).use(router).mount('#app')
 
 window.addEventListener('load', () => {
-  store.data = JSON.parse(localStorage.getItem('store'))
+  store.data = JSON.parse(localStorage.getItem('store') ?? { categories: [] }) || { categories: [] }
 })
 window.addEventListener('beforeunload', () => {
   localStorage.setItem('store', JSON.stringify(store.data))

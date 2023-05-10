@@ -1,26 +1,35 @@
 <template>
-  <main @click="openTheme">
-    <section>
+  <main>
+    <header @click="delTheme">
+      &times;
+    </header>
+    <section @click="openTheme">
       <h3>{{ theme.name }}</h3>
-      <p>carte1, carte2....</p>
     </section>
-    <footer>
+    <footer @click="openTheme">
       &rsaquo;
     </footer>
   </main>
 </template>
 
 <script>
-
+import { store } from '@/store'
 export default {
   name: 'ThematicComponent',
   props: {
     theme: Object
   },
+  data () {
+    return {
+      dataStore: store
+    }
+  },
   methods: {
     openTheme () {
-      this.$router.push('/about/' + this.$route.params.name + '/' + this.theme.name)
-      // this.$emit('seeCat', this.cat.name)
+      this.$router.push('/revisions/' + this.$route.params.name + '/' + this.theme.name)
+    },
+    delTheme () {
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.splice(this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.indexOf(this.theme), 1)
     }
   }
 }
@@ -43,7 +52,7 @@ main:hover {
 section {
   flex: 95%;
 }
-footer {
+footer, header {
   flex: 5%;
   font-size: xx-large;
 }

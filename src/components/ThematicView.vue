@@ -25,10 +25,14 @@ export default {
     }
   },
   mounted () {
-    this.cartes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards
+    if (this.dataStore.data.categories.length > 0) {
+      this.cartes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards
+    }
   },
   updated () {
-    this.cartes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards
+    if (this.dataStore.data.categories.length > 0) {
+      this.cartes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards
+    }
   }
 }
 </script>

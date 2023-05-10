@@ -1,7 +1,6 @@
 <template>
   <div>
     <!-- {{ catName }} -->
-    {{ dataStore }}
     <ThematicComponent v-for="(item, index) in themes" :key="index" :theme="item"/>
   </div>
 </template>

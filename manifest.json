@@ -1,0 +1,7 @@
+{
+  "short_name": "Révisions",
+  "name": "Projet Mémory",
+  "display": "standalone",
+  "scope": "/",
+  "description": "Révisez en vous amusant avec le projet mémory !"
+}

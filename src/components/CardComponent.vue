@@ -1,5 +1,8 @@
 <template>
   <main @click="toggleCarte">
+    <header @click="delCard">
+      &times;
+    </header>
     <section>
       <label>Question</label>
       <textarea rows="10" resizeable="" type="text" v-model="recto"></textarea>
@@ -32,6 +35,11 @@ export default {
     verso (newVal) {
       this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards.find(card => card.id === this.carte.id).verso = newVal
     }
+  },
+  methods: {
+    delCard () {
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(theme => theme.name === this.$route.params.tname).cards.splice(this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(theme => theme.name === this.$route.params.tname).cards.indexOf(this.carte), 1)
+    }
   }
 }
 </script>
@@ -56,7 +64,7 @@ main:hover {
 section {
   flex: 95%;
 }
-footer {
+footer, header {
   flex: 5%;
   font-size: xx-large;
 }
