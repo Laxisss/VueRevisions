@@ -1,6 +1,7 @@
 <template>
   <div>
     <!-- {{ catName }} -->
+    {{ dataStore }}
     <ThematicComponent v-for="(item, index) in themes" :key="index" :theme="item"/>
   </div>
 </template>
@@ -25,6 +26,9 @@ export default {
     }
   },
   mounted () {
+    this.themes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics
+  },
+  updated () {
     this.themes = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics
   }
 }

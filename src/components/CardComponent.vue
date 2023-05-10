@@ -1,26 +1,36 @@
 <template>
   <main @click="toggleCarte">
     <section>
-      <h3>{{ carte.name }}</h3>
-      <p>question1, solution1....</p>
+      <label>Question</label>
+      <textarea rows="10" resizeable="" type="text" v-model="recto"></textarea>
     </section>
-    <footer>
-      &rsaquo;
-    </footer>
+    <section>
+      <label>Réponse</label>
+      <textarea rows="10" type="text" v-model="verso"></textarea>
+    </section>
   </main>
 </template>
 
 <script>
-
+import { store } from '../store'
 export default {
-  name: 'ThematicComponent',
+  name: 'CardComponent',
   props: {
     carte: Object
   },
-  methods: {
-    toggleCarte () {
-      // this.$router.push('/about/' + this.$route.params.name + '/' + this.carte.name)
-      // this.$emit('seeCat', this.cat.name)
+  data () {
+    return {
+      dataStore: store,
+      recto: this.carte.recto,
+      verso: this.carte.verso
+    }
+  },
+  watch: {
+    recto (newVal) {
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards.find(card => card.id === this.carte.id).recto = newVal
+    },
+    verso (newVal) {
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards.find(card => card.id === this.carte.id).verso = newVal
     }
   }
 }
@@ -33,8 +43,11 @@ main {
   padding: 10px;
   margin: 20px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
+  height: 380px;
+  aspect-ratio: 9 / 16;
 }
 main:hover {
   background-color: whitesmoke;
@@ -46,5 +59,10 @@ section {
 footer {
   flex: 5%;
   font-size: xx-large;
+}
+textarea {
+  resize: none;
+  border: 1px solid gainsboro;
+  border-radius: 8px;
 }
 </style>

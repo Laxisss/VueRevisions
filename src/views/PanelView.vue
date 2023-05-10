@@ -13,17 +13,17 @@
             <span v-else>Cartes</span>
           </h2>
           <span>
-            <button class="plus-button" v-if="!addNew" @click="addNew = !addNew">+</button>
+            <button class="plus-button" v-if="!addNew && (currentCat == null || currentTheme == null)" @click="addNew = !addNew">+</button>
+            <button class="plus-button" v-else-if="!addnew" @click="addCard">+</button>
             <span class="input-group" v-else>
               <input type="text" v-model="newItem"/>
               <button v-if="currentCat == null" @click="addCategory">&check;</button>
               <button v-else-if="currentTheme == null" @click="addTheme">&check;</button>
-              <button v-else @click="addCard">&check;</button>
             </span>
           </span>
         </div>
         <!-- <span >cat</span> -->
-        <CategoryList v-if="currentCat == null" @seeCat="seeCat"/>
+        <CategoryList v-if="currentCat == null"/>
         <CategoryView v-else-if="currentTheme == null" :catName="currentCat"/>
         <ThematicView v-else :catName="currentCat"/>
         <!-- <Category @seeCat="seeCat" v-for="(item, index) in dataStore.data.categories" :key="index" :cat="item"/> -->
@@ -57,6 +57,11 @@ export default {
       currentTheme: null
     }
   },
+  watch: {
+    addNew () {
+      this.newItem = ''
+    }
+  },
   methods: {
     addCategory () {
       if (this.newItem === '') {
@@ -80,16 +85,23 @@ export default {
         thematics: []
       })
     },
-    seeCat (payload) {
-      this.currentCat = payload
-      console.log(payload)
+    addCard () {
+      const cardIds = this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards.map(card => card.id)
+      this.dataStore.data.categories.find(cat => cat.name === this.$route.params.name).thematics.find(thematic => thematic.name === this.$route.params.tname).cards.push({
+        id: Math.max(cardIds + 1 || 0),
+        recto: '',
+        verso: '',
+        rate: []
+      })
     }
   },
   updated () {
     this.currentCat = this.$route.params.name
+    this.currentTheme = this.$route.params.tname
   },
   mounted () {
     this.currentCat = this.$route.params.name
+    this.currentTheme = this.$route.params.tname
   },
   created () {
     // window.addEventListener('beforeunload', e => {
